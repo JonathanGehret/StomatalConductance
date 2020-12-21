@@ -5,9 +5,13 @@
 # and C4 plants. Leaf temperature is calculated from the energy balance.
 # -------------------------------------------------------------------------
   
-  # --- Waveband indices for visible and near-infrared
+# using function LeafPhysiologyParams:
 
-params.vis = 1; params.nir = 2;
+source("LeafPhysiologyParams.R")
+
+# --- Waveband indices for visible and near-infrared
+
+params.vis = 1; params.nir = 2
 
 # --- Physical constants
 
@@ -39,8 +43,11 @@ leaf.c3psn = 1;
 leaf.colim = 1;
 
 # Leaf physiological parameters
+# include physcons?...but why? aren't they constant?
+#   physcon.tfrz        ! Freezing point of water (K)
+#   physcon.rgas        ! Universal gas constant (J/K/mol)
 
-[leaf] = LeafPhysiologyParams (params, physcon, leaf);
+leaf = LeafPhysiologyParams(physcon.tfrz,physcon.rgas);
 
 # --- Atmospheric forcing
 
