@@ -1,5 +1,9 @@
 # function [leaf] = LeafPhysiologyParams (params, physcon, leaf)
-LeafPhysiologyParams = function(params, physcon, leaf){
+
+# these parameters are never called, how to implement?
+# can ignore leaf, as those are decided on C3 and Ball-Berry
+
+LeafPhysiologyParams = function(params, physcon){
   
 # ------------------------------------------------------
   # Input
@@ -166,10 +170,10 @@ leaf.emiss = 0.98;
 
 # --- Leaf reflectance and transmittance: visible and near-infrared wavebands
 
-leaf.rho = 0.10;
-leaf.tau = 0.10;
-leaf.rho = 0.40;
-leaf.tau = 0.40;
+leaf.rhovis = 0.10;
+leaf.tauvis = 0.10;
+leaf.rhonir = 0.40;
+leaf.taunir = 0.40;
 
 # leaf.rho and leaf.tau as functions of params.vis and params.nir?
 
@@ -182,7 +186,8 @@ leaf.tau = 0.40;
 leaf = c(leaf.vcmax25,leaf.jmax25,leaf.kp25_c4,leaf.rd25,leaf.kc25,leaf.ko25,
          leaf.cp25,leaf.kcha,leaf.koha,leaf.cpha,leaf.rdha,leaf.vcmaxha,leaf.jmaxha,
          leaf.rdhd,leaf.vcmaxhd,leaf.jmaxhd,leaf.vcmaxc,leaf.jmaxc,leaf.rdc,
-         leaf.phi_psii,leaf.theta_j,leaf.colim_c3,leaf.g0,leaf.g1,leaf.dleaf,leaf.emiss)
+         leaf.phi_psii,leaf.theta_j,leaf.colim_c3,leaf.g0,leaf.g1,leaf.dleaf,leaf.emiss,
+         leaf.rhovis, leaf.tauvis, leaf.rhonir,leaf.taunir)
 
 return(leaf)
 }
