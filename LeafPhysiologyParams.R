@@ -3,7 +3,7 @@
 # these parameters are never called, how to implement?
 # can ignore leaf, as those are decided on C3 and Ball-Berry
 
-LeafPhysiologyParams = function(params, physcon){
+LeafPhysiologyParams = function(physcon.tfrz,physcon.rgas){
   
 # ------------------------------------------------------
   # Input
