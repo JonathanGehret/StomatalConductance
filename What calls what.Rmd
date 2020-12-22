@@ -1,0 +1,12 @@
+What calls What?
+sp_12_02 calls:
+  satvap
+  LeafPhysiologyParams
+  LeafFluxes 
+    Hybrid_root
+      TleafFunc
+        leafBoundarylayer
+        Lina - LeafPhotosynthesis
+        Group 3 - LeafTemperature
+      brent_root
+        TleafFunc

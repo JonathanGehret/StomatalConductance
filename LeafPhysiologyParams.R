@@ -3,7 +3,7 @@
 # these parameters are never called, how to implement?
 # can ignore leaf, as those are decided on C3 and Ball-Berry
 
-LeafPhysiologyParams = function(physcon.tfrz,physcon.rgas){
+LeafPhysiologyParams = function(params,physcon,leaf){
   
 # ------------------------------------------------------
   # Input
@@ -59,123 +59,139 @@ LeafPhysiologyParams = function(physcon.tfrz,physcon.rgas){
 # --- Vcmax and other parameters (at 25C)
 
 #if (leaf.c3psn == 1)
-leaf.vcmax25 = 60;
-leaf.jmax25 = 1.67 * leaf.vcmax25;
-leaf.kp25_c4 = 0;
-leaf.rd25 = 0.015 * leaf.vcmax25;
+leaf$vcmax25 = 60;
+leaf$jmax25 = 1.67 * leaf$vcmax25;
+leaf$kp25_c4 = 0;
+leaf$rd25 = 0.015 * leaf$vcmax25;
 # else
-# leaf.vcmax25 = 40;
-# leaf.jmax25 = 0;
-# leaf.kp25_c4 = 0.02 * leaf.vcmax25;
-# leaf.rd25 = 0.025 * leaf.vcmax25;
+# leaf$vcmax25 = 40;
+# leaf$jmax25 = 0;
+# leaf$kp25_c4 = 0.02 * leaf$vcmax25;
+# leaf$rd25 = 0.025 * leaf$vcmax25;
 # end
 
 # --- Kc, Ko, Cp at 25C
 
-leaf.kc25 = 404.9;
-leaf.ko25 = 278.4;
-leaf.cp25 = 42.75;
+leaf$kc25 = 404.9;
+leaf$ko25 = 278.4;
+leaf$cp25 = 42.75;
 
 # --- Activation energy
 
-leaf.kcha = 79430;
-leaf.koha = 36380;
-leaf.cpha = 37830;
-leaf.rdha = 46390;
-leaf.vcmaxha = 65330;
-leaf.jmaxha  = 43540;
+leaf$kcha = 79430;
+leaf$koha = 36380;
+leaf$cpha = 37830;
+leaf$rdha = 46390;
+leaf$vcmaxha = 65330;
+leaf$jmaxha  = 43540;
 
 # --- High temperature deactivation
 
 # Deactivation energy (J/mol)
 
-leaf.rdhd = 150000;
-leaf.vcmaxhd = 150000;
-leaf.jmaxhd  = 150000;
+leaf$rdhd = 150000;
+leaf$vcmaxhd = 150000;
+leaf$jmaxhd  = 150000;
 
 # Entropy term (J/mol/K)
 
-leaf.rdse = 490;
-leaf.vcmaxse = 490;
-leaf.jmaxse  = 490;
+leaf$rdse = 490;
+leaf$vcmaxse = 490;
+leaf$jmaxse  = 490;
 
 # Scaling factors for high temperature inhibition (25 C = 1.0).
 # The factor "c" scales the deactivation to a value of 1.0 at 25C.
 
-fth25 = function(hd, se) {1 + exp((-hd + se*(physcon.tfrz+25)) / (physcon.rgas*(physcon.tfrz+25)))};
-leaf.vcmaxc = fth25 (leaf.vcmaxhd, leaf.vcmaxse);
-leaf.jmaxc  = fth25 (leaf.jmaxhd, leaf.jmaxse);
-leaf.rdc    = fth25 (leaf.rdhd, leaf.rdse);
+# do we really have to call these values like that? or does the function know???
+
+# physcon$tfrz = physcon$physcon.tfrz;                # Freezing point of water (K)
+# physcon$rgas = physcon$physcon$rgas;               # Universal gas constant (J/K/mol)
+
+fth25 = function(hd, se) {1 + exp((-hd + se*(physcon$tfrz+25)) / (physcon$rgas*(physcon$tfrz+25)))};
+leaf$vcmaxc = fth25 (leaf$vcmaxhd, leaf$vcmaxse);
+leaf$jmaxc  = fth25 (leaf$jmaxhd, leaf$jmaxse);
+leaf$rdc    = fth25 (leaf$rdhd, leaf$rdse);
 
 # --- C3 parameters
 
 # Quantum yield of PS II
 
-leaf.phi_psii = 0.85;
+leaf$phi_psii = 0.85;
 
 # Empirical curvature parameter for electron transport rate
 
-leaf.theta_j = 0.90;
+leaf$theta_j = 0.90;
 
 # Empirical curvature parameter for C3 co-limitation
 
-leaf.colim_c3 = 0.98;
+leaf$colim_c3 = 0.98;
 
 # Empirical curvature parameters for C4 co-limitation
 
-# leaf.colim_c4a = 0.80;
-# leaf.colim_c4b = 0.95;
+# leaf$colim_c4a = 0.80;
+# leaf$colim_c4b = 0.95;
 
 # --- C4: Quantum yield (mol CO2 / mol photons)
 
-# leaf.qe_c4 = 0.05;
+# leaf$qe_c4 = 0.05;
 
 # --- Stomatal conductance parameters (We use C3 and Ball-Berry)
 
-# if (leaf.c3psn == 1) (asking for C3)
+# if (leaf$c3psn == 1) (asking for C3)
   
-#if (leaf.gstyp == 1)
-leaf.g0 = 0.01;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
-leaf.g1 = 9.0;        # Ball-Berry slope of conductance-photosynthesis relationship
-#elseif (leaf.gstyp == 0)
-#leaf.g0 = 0.0;        # Medlyn minimum leaf conductance (mol H2O/m2/s)
-#leaf.g1 = 4.45;       # Medlyn slope of conductance-photosynthesis relationship
+#if (leaf$gstyp == 1)
+leaf$g0 = 0.01;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
+leaf$g1 = 9.0;        # Ball-Berry slope of conductance-photosynthesis relationship
+#elseif (leaf$gstyp == 0)
+#leaf$g0 = 0.0;        # Medlyn minimum leaf conductance (mol H2O/m2/s)
+#leaf$g1 = 4.45;       # Medlyn slope of conductance-photosynthesis relationship
 
 
 # else (if C4)
   
-#  if (leaf.gstyp == 1)
-#    leaf.g0 = 0.04;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
-#leaf.g1 = 4.0;        # Ball-Berry slope of conductance-photosynthesis relationship
-#elseif (leaf.gstyp == 0)
-#leaf.g0 = 0.0;        # Medlyn minimum leaf conductance (mol H2O/m2/s)
-#leaf.g1 = 1.62;       # Medlyn slope of conductance-photosynthesis relationship
+#  if (leaf$gstyp == 1)
+#    leaf$g0 = 0.04;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
+#leaf$g1 = 4.0;        # Ball-Berry slope of conductance-photosynthesis relationship
+#elseif (leaf$gstyp == 0)
+#leaf$g0 = 0.0;        # Medlyn minimum leaf conductance (mol H2O/m2/s)
+#leaf$g1 = 1.62;       # Medlyn slope of conductance-photosynthesis relationship
 #end
 
 # end
 
 # --- Stomatal efficiency for optimization (An/E; umol CO2/ mol H2O)
 
-# if (leaf.gstyp == 2)
-#  leaf.iota = 750;
+# if (leaf$gstyp == 2)
+#  leaf$iota = 750;
 # end
 
 # --- Leaf dimension (m)
 
-leaf.dleaf = 0.05;
+leaf$dleaf = 0.05;
 
 # --- Leaf emissivity
 
-leaf.emiss = 0.98;
+leaf$emiss = 0.98;
 
 # --- Leaf reflectance and transmittance: visible and near-infrared wavebands
 
-leaf.rhovis = 0.10;
-leaf.tauvis = 0.10;
-leaf.rhonir = 0.40;
-leaf.taunir = 0.40;
+#leaf$rho.vis = 0.10;
+#leaf$tau.vis = 0.10;
+#leaf$rho.nir = 0.40;
+#leaf$tau.nir = 0.40;
 
-# leaf.rho and leaf.tau as functions of params.vis and params.nir?
+# coul also add to 2 objects leaf$rho and leaf$tau, as in the example
+# params$vis = params$params$vis
+# params$nir = params$params$nir
+# leaf$rho = data.frame("params$vis","params$nir")
+# leaf$tau = data.frame("params$vis","params$nir")
+leaf$rho[params$vis] = 0.10;
+leaf$tau[params$vis] = 0.10;
+leaf$rho[params$nir] = 0.40;
+leaf$tau[params$nir] = 0.40;
+
+# but they don't change, so can just use them as one value
+# also, it would complicate the dataframe to add dataframes
 
 #leaf.rho(params.vis) = 0.10;
 #leaf.tau(params.vis) = 0.10;
@@ -183,11 +199,13 @@ leaf.taunir = 0.40;
 #leaf.tau(params.nir) = 0.40;
 
 
-leaf = c(leaf.vcmax25,leaf.jmax25,leaf.kp25_c4,leaf.rd25,leaf.kc25,leaf.ko25,
-         leaf.cp25,leaf.kcha,leaf.koha,leaf.cpha,leaf.rdha,leaf.vcmaxha,leaf.jmaxha,
-         leaf.rdhd,leaf.vcmaxhd,leaf.jmaxhd,leaf.vcmaxc,leaf.jmaxc,leaf.rdc,
-         leaf.phi_psii,leaf.theta_j,leaf.colim_c3,leaf.g0,leaf.g1,leaf.dleaf,leaf.emiss,
-         leaf.rhovis, leaf.tauvis, leaf.rhonir,leaf.taunir)
+# LeafPhysiologyParams_output = data.frame(leaf$vcmax25,leaf$jmax25,leaf$kp25_c4,leaf$rd25,leaf$kc25,leaf$ko25,
+#                                         leaf$cp25,leaf$kcha,leaf$koha,leaf$cpha,leaf$rdha,leaf$vcmaxha,leaf$jmaxha,
+#                                         leaf$rdhd,leaf$vcmaxhd,leaf$jmaxhd,leaf$vcmaxc,leaf$jmaxc,leaf$rdc,
+#                                         leaf$phi_psii,leaf$theta_j,leaf$colim_c3,leaf$g0,leaf$g1,leaf$dleaf,leaf$emiss,
+#                                         leaf$rho.vis, leaf$tau.vis, leaf$rho.nir,leaf$tau.nir)
+
+# leaf = cbind(leaf,LeafPhysiologyParams_output)
 
 return(leaf)
 }
