@@ -21,6 +21,7 @@ physcon = list()
 atmos = list()
 flux = list()
 leaf = list()
+ground = list()
 
 # --- Waveband indices for visible and near-infrared
 
