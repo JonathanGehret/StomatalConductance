@@ -91,7 +91,7 @@ brent_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol) {
         d = xm;
         e = d;
       }
-      else {
+    } else {
         d = xm;
         e = d;
       }
@@ -122,11 +122,9 @@ brent_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol) {
         stop('brent_root error: Maximum number of interations exceeded')
       }
     }
-    root = b;
-  }
   
+  root = b;
   brent_output = list(flux,root)
-  
   return(brent_output)
   
 }
