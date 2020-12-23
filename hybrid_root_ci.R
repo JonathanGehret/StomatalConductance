@@ -34,7 +34,7 @@ hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
   f0 = flux_f0[2]
   if (f0 == 0) {
     root = x0;
-    return(root) #what about this return?
+    return(list(flux,root)) #what about this return?
   }
   
   
@@ -48,7 +48,7 @@ hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
   f1 = flux_f1[2]
   if (f1 == 0) {
     root = x1;
-    return(root) #same as above
+    return(list(flux,root)) #same as above
   }
   
   # --- Order initial root estimates correctly
