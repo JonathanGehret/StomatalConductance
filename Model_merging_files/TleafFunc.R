@@ -32,7 +32,11 @@ flux = LeafBoundaryLayer (physcon, atmos, leaf, flux);
 # -------------------------------------------------------------------------
 
 flux$gbh = 
-flux$gbv =
+  
+# gbw typically between (~1–4 mol m–2 s–1) 
+
+flux$gbv = 1
+    
 flux$gbc =
 
 # --- Leaf photosynthesis and stomatal conductance

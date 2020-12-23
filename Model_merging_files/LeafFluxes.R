@@ -8,7 +8,7 @@ LeafFluxes = function(physcon, atmos, leaf, flux){
 # leaf.gstyp is always 1
 # if (leaf.gstyp <= 1)
   
-  # Solve for tleaf: Use TleafFunc to iterate leaf temperature, energy fluxes,
+# Solve for tleaf: Use TleafFunc to iterate leaf temperature, energy fluxes,
 # photosynthesis and stomatal conductance. This temperature is refined to an
 # accuracy of tol. Do not use the returned value (dummy), and instead use
 # the tleaf calculated in the final call to TleafFunc.
