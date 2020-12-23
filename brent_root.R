@@ -90,6 +90,7 @@ for (iter in 1:itmax) {
          d = xm;
          e = d;
       }
+   }
     else {
       d = xm;
       e = d;
@@ -120,12 +121,10 @@ for (iter in 1:itmax) {
    if (iter == itmax) {
       stop('brent_root error: Maximum number of interations exceeded')
    }
-   }
-root = b;
 }
 
+root = b;
 brent_output = list(flux,root)
-
 return(brent_output)
 
 }
