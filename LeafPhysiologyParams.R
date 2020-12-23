@@ -147,10 +147,28 @@ leaf$emiss = 0.97;
 
 # --- Leaf reflectance and transmittance: visible and near-infrared wavebands
 
-leaf$rho[params$vis] = 0.10;
-leaf$tau[params$vis] = 0.10;
-leaf$rho[params$nir] = 0.40;
-leaf$tau[params$nir] = 0.40;
+# example values:
+# par_reflect_3       = 0.057; PAR leaf reflectivity    = rho vis
+# par_trans_3         = 0.048; PAR leaf transmissivity  = tau vis
+# par_soil_refl_dry_3 = 0.1; PAR soil reflectivitiy
+# nir_reflect_3       = 0.43; NIR leaf reflectivity     = rho nir
+# nir_trans_3         = 0.26; NIR leaf transmissivity   = tau nir
+# nir_soil_refl_dry_3 = 0.1; NIR soil reflectivitiy
+
+
+leaf$rho[params$vis] = 0.057;
+leaf$tau[params$vis] = 0.048;
+leaf$rho[params$nir] = 0.43;
+leaf$tau[params$nir] = 0.26;
+
+# original values
+
+# leaf$rho[params$vis] = 0.10;
+# leaf$tau[params$vis] = 0.10;
+# leaf$rho[params$nir] = 0.40;
+# leaf$tau[params$nir] = 0.40;
+
+
 
 return(leaf)
 }
