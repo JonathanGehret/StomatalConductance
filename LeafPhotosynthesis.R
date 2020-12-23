@@ -13,6 +13,7 @@ library("pracma")
   # 2. set initial leaf temperature:
 flux$tleaf = atmos$tair;
   # 3. get flux$gbv, flux$gbc, flux$apar from LeafBoundaryLayer.R
+  # testing with these values return gs = 0.01, which is plausible
     
 # Calculate leaf photosynthesis using one of two methods:
   # (1) Calculate leaf photosynthesis and stomatal conductance
