@@ -7,6 +7,12 @@ sp_12_02 calls:
       TleafFunc
         Group 4 - leafBoundarylayer
         Group 5 - LeafPhotosynthesis
+          hybrid_root_ci
+            brent_root_ci
+              CiFunc
+          satvap
+          CiFunc
         Group 4 - LeafTemperature
+          latvap
       brent_root
         TleafFunc
