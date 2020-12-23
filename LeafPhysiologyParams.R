@@ -102,11 +102,6 @@ leaf$jmaxse  = 490;
 # Scaling factors for high temperature inhibition (25 C = 1.0).
 # The factor "c" scales the deactivation to a value of 1.0 at 25C.
 
-# do we really have to call these values like that? or does the function know???
-
-# physcon$tfrz = physcon$physcon.tfrz;                # Freezing point of water (K)
-# physcon$rgas = physcon$physcon$rgas;               # Universal gas constant (J/K/mol)
-
 fth25 = function(hd, se) {1 + exp((-hd + se*(physcon$tfrz+25)) / (physcon$rgas*(physcon$tfrz+25)))};
 leaf$vcmaxc = fth25 (leaf$vcmaxhd, leaf$vcmaxse);
 leaf$jmaxc  = fth25 (leaf$jmaxhd, leaf$jmaxse);
@@ -137,75 +132,25 @@ leaf$colim_c3 = 0.98;
 
 # --- Stomatal conductance parameters (We use C3 and Ball-Berry)
 
-# if (leaf$c3psn == 1) (asking for C3)
-  
-#if (leaf$gstyp == 1)
 leaf$g0 = 0.01;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
 leaf$g1 = 9.0;        # Ball-Berry slope of conductance-photosynthesis relationship
-#elseif (leaf$gstyp == 0)
-#leaf$g0 = 0.0;        # Medlyn minimum leaf conductance (mol H2O/m2/s)
-#leaf$g1 = 4.45;       # Medlyn slope of conductance-photosynthesis relationship
-
-
-# else (if C4)
-  
-#  if (leaf$gstyp == 1)
-#    leaf$g0 = 0.04;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
-#leaf$g1 = 4.0;        # Ball-Berry slope of conductance-photosynthesis relationship
-#elseif (leaf$gstyp == 0)
-#leaf$g0 = 0.0;        # Medlyn minimum leaf conductance (mol H2O/m2/s)
-#leaf$g1 = 1.62;       # Medlyn slope of conductance-photosynthesis relationship
-#end
-
-# end
-
-# --- Stomatal efficiency for optimization (An/E; umol CO2/ mol H2O)
-
-# if (leaf$gstyp == 2)
-#  leaf$iota = 750;
-# end
 
 # --- Leaf dimension (m)
 
-leaf$dleaf = 0.05;
+# leaf$dleaf = 0.05;
+leaf$dleaf = 0.1;
 
 # --- Leaf emissivity
 
-leaf$emiss = 0.98;
+leaf$emiss = 0.97;
+# leaf$emiss = 0.98;
 
 # --- Leaf reflectance and transmittance: visible and near-infrared wavebands
 
-#leaf$rho.vis = 0.10;
-#leaf$tau.vis = 0.10;
-#leaf$rho.nir = 0.40;
-#leaf$tau.nir = 0.40;
-
-# coul also add to 2 objects leaf$rho and leaf$tau, as in the example
-# params$vis = params$params$vis
-# params$nir = params$params$nir
-# leaf$rho = data.frame("params$vis","params$nir")
-# leaf$tau = data.frame("params$vis","params$nir")
 leaf$rho[params$vis] = 0.10;
 leaf$tau[params$vis] = 0.10;
 leaf$rho[params$nir] = 0.40;
 leaf$tau[params$nir] = 0.40;
-
-# but they don't change, so can just use them as one value
-# also, it would complicate the dataframe to add dataframes
-
-#leaf.rho(params.vis) = 0.10;
-#leaf.tau(params.vis) = 0.10;
-#leaf.rho(params.nir) = 0.40;
-#leaf.tau(params.nir) = 0.40;
-
-
-# LeafPhysiologyParams_output = data.frame(leaf$vcmax25,leaf$jmax25,leaf$kp25_c4,leaf$rd25,leaf$kc25,leaf$ko25,
-#                                         leaf$cp25,leaf$kcha,leaf$koha,leaf$cpha,leaf$rdha,leaf$vcmaxha,leaf$jmaxha,
-#                                         leaf$rdhd,leaf$vcmaxhd,leaf$jmaxhd,leaf$vcmaxc,leaf$jmaxc,leaf$rdc,
-#                                         leaf$phi_psii,leaf$theta_j,leaf$colim_c3,leaf$g0,leaf$g1,leaf$dleaf,leaf$emiss,
-#                                         leaf$rho.vis, leaf$tau.vis, leaf$rho.nir,leaf$tau.nir)
-
-# leaf = cbind(leaf,LeafPhysiologyParams_output)
 
 return(leaf)
 }

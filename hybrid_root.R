@@ -35,7 +35,7 @@ flux = flux_f0$flux
 f0 = flux_f0$tleaf_dif
 if (f0 == 0) {
    root = x0;
-   # return(flux_f0) what about this return?
+   return(root) #what about this return?
 }
 
 
@@ -49,7 +49,7 @@ flux = flux_f1$flux
 f1 = flux_f1$tleaf_dif
 if (f1 == 0) {
    root = x1;
-   # return(flux_f1) same as above
+   return(root) #same as above
 }
 
 # --- Order initial root estimates correctly
