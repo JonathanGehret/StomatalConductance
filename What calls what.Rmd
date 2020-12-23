@@ -5,8 +5,8 @@ sp_12_02 calls:
   LeafFluxes 
     Hybrid_root
       TleafFunc
-        leafBoundarylayer
-        Lina - LeafPhotosynthesis
-        Group 3 - LeafTemperature
+        Group 4 - leafBoundarylayer
+        Group 5 - LeafPhotosynthesis
+        Group 4 - LeafTemperature
       brent_root
         TleafFunc
