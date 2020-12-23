@@ -31,40 +31,16 @@ flux = LeafBoundaryLayer (physcon, atmos, leaf, flux);
 #   flux$gbc          ! Leaf boundary layer conductance, CO2 (mol CO2/m2 leaf/s)
 # -------------------------------------------------------------------------
 
-flux$gbh = 
-  
-# gbw typically between (~1–4 mol m–2 s–1) 
+#test values
 
-flux$gbv = 1
-    
-flux$gbc =
+flux$gbh = 0.638
+# gbw typically between (~1–4 mol m–2 s–1) 
+flux$gbv = 0.702
+flux$gbc = 0.517
 
 # --- Leaf photosynthesis and stomatal conductance
 
 flux = LeafPhotosynthesis (physcon, atmos, leaf, flux);
-
-# Input or output (depending on method)
-#   flux$gs             ! Leaf stomatal conductance (mol H2O/m2 leaf/s)
-#
-# Output
-#   flux$vcmax          ! Maximum carboxylation rate (umol/m2/s)
-#   flux$jmax           ! Maximum electron transport rate (umol/m2/s)
-#   flux$cp             ! CO2 compensation point (umol/mol)
-#   flux$kc             ! Michaelis-Menten constant for CO2 (umol/mol)
-#   flux$ko             ! Michaelis-Menten constant for O2 (mmol/mol)
-#   flux$je             ! Electron transport rate (umol/m2/s)
-#   flux$kp_c4          ! C4: Initial slope of CO2 response curve (mol/m2/s)
-#   flux$ac             ! Leaf Rubisco-limited gross photosynthesis (umol CO2/m2 leaf/s)
-#   flux$aj             ! Leaf RuBP regeneration-limited gross photosynthesis (umol CO2/m2 leaf/s)
-#   flux$ap             ! Leaf product-limited (C3) or CO2-limited (C4) gross photosynthesis (umol CO2/m2 leaf/s)
-#   flux$ag             ! Leaf gross photosynthesis (umol CO2/m2 leaf/s)
-#   flux$an             ! Leaf net photosynthesis (umol CO2/m2 leaf/s)
-#   flux$rd             ! Leaf respiration rate (umol CO2/m2 leaf/s)
-#   flux$cs             ! Leaf surface CO2 (umol/mol)
-#   flux$ci             ! Leaf intercellular CO2 (umol/mol)
-#   flux$hs             ! Leaf fractional humidity at surface (dimensionless)
-#   flux$vpd            ! Leaf vapor pressure deficit at surface (Pa)
-# ------------------------------------------------------
 
 # --- Leaf temperature and energy fluxes
 
@@ -83,7 +59,7 @@ flux = LeafTemperature (physcon, atmos, leaf, flux);
 # ------------------------------------------------------
 
 # therefore, for leaf.temperature for now:
-# flux$tleaf =
+# flux$tleaf = 
 # flux$rnet =      
 # flux$lwrad =    
 # flux$shflx =    
