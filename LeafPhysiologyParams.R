@@ -101,6 +101,7 @@ leaf$jmaxse  = 490;
 
 # Scaling factors for high temperature inhibition (25 C = 1.0).
 # The factor "c" scales the deactivation to a value of 1.0 at 25C.
+# adjusting temperature 
 
 fth25 = function(hd, se) {1 + exp((-hd + se*(physcon$tfrz+25)) / (physcon$rgas*(physcon$tfrz+25)))};
 leaf$vcmaxc = fth25 (leaf$vcmaxhd, leaf$vcmaxse);
