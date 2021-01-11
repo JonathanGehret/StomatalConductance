@@ -60,9 +60,6 @@ flux$ac = flux$vcmax * max(ci_val - flux$cp, 0) / (ci_val + flux$kc * (1 + atmos
 # C3: RuBP regeneration-limited photosynthesis
 flux$aj = flux$je * max(ci_val - flux$cp, 0) / (4 * ci_val + 8 * flux$cp);
 
-# C3: Product-limited photosynthesis (do not use)
-flux$ap = 0;
-
 # --- Net photosynthesis as the minimum or co-limited rate
 
 if (leaf$colim == 1) { #Use co-limitation
@@ -71,23 +68,14 @@ if (leaf$colim == 1) { #Use co-limitation
 # rate found by solving the polynomial: aquad*Ai^2 + bquad*Ai + cquad = 0 for Ai.
 # Correct solution is the smallest of the two roots.
 
-# if (leaf$c3psn == 1)
 aquad = leaf$colim_c3;
 bquad = -(flux$ac + flux$aj);
 cquad = flux$ac * flux$aj;
 pcoeff = c(aquad,bquad,cquad);
 proots = roots(pcoeff);
 ai = min(proots[1], proots[2]);
-
+flux$ag = ai;
 }
-
-# elseif (leaf$colim == 0) # No co-limitation
-
-# if (leaf$c3psn == 1)
-#  flux$ag = min(flux$ac, flux$aj); # C3
-#else
-#  flux$ag = min(flux$ac, flux$aj, flux$ap); # C4
-#end
 
 # Prevent photosynthesis from ever being negative
 
@@ -116,18 +104,20 @@ esat = satvap ((flux$tleaf-physcon$tfrz));
 # solution is the larger of the two roots. This solution is
 # valid for An >= 0. With An <= 0, gs = g0.
 
-# if (leaf$gstyp == 1)
 term = flux$an / flux$cs;
 if (flux$an > 0){
-  aquad = 1;
-  bquad = flux$gbv - leaf$g0 - leaf$g1 * term;
-  cquad = -flux$gbv * (leaf$g0 + leaf$g1 * term * atmos$eair / esat);
-  pcoeff = c(aquad,bquad,cquad);
-  proots = roots(pcoeff);
-  flux$gs = max(proots[1], proots[2]);
+#  aquad = 1;
+#  bquad = flux$gbv - leaf$g0 - leaf$g1 * term;
+#  cquad = -flux$gbv * (leaf$g0 + leaf$g1 * term * atmos$eair / esat);
+#  pcoeff = c(aquad,bquad,cquad);
+#  proots = roots(pcoeff);
+#  flux$gs = max(proots[1], proots[2]);
+# is this enough for ball berry? or ue the plynomial thing?
+  flux$gs = leaf$g0 + leaf$g1 * term * atmos$eair / esat;
 } else {
   flux$gs = leaf$g0;
 }
+
 
 # --- Diffusion (supply-based) photosynthetic rate
 

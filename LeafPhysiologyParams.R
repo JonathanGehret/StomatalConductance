@@ -1,8 +1,3 @@
-# function [leaf] = LeafPhysiologyParams (params, physcon, leaf)
-
-# these parameters are never called, how to implement?
-# can ignore leaf, as those are decided on C3 and Ball-Berry
-
 LeafPhysiologyParams = function(params,physcon,leaf){
   
 # ------------------------------------------------------
@@ -52,23 +47,12 @@ LeafPhysiologyParams = function(params,physcon,leaf){
 #   leaf.iota           ! Stomatal efficiency (umol CO2/ mol H2O)
 # ------------------------------------------------------
   
-  
-# leaf.c3psn          ! Photosynthetic pathway: 1 = C3. 0 = C4 plant 
-# therefore: remove if/else about deciding c3 or C4
-  
 # --- Vcmax and other parameters (at 25C)
 
-#if (leaf.c3psn == 1)
 leaf$vcmax25 = 60;
 leaf$jmax25 = 1.67 * leaf$vcmax25;
 leaf$kp25_c4 = 0;
 leaf$rd25 = 0.015 * leaf$vcmax25;
-# else
-# leaf$vcmax25 = 40;
-# leaf$jmax25 = 0;
-# leaf$kp25_c4 = 0.02 * leaf$vcmax25;
-# leaf$rd25 = 0.025 * leaf$vcmax25;
-# end
 
 # --- Kc, Ko, Cp at 25C
 
@@ -99,9 +83,14 @@ leaf$rdse = 490;
 leaf$vcmaxse = 490;
 leaf$jmaxse  = 490;
 
+# leaf$rdse = 
+# leaf$vcmaxse = 668.39 - 1.07 * atmos$tair
+# leaf$jmaxse = 659.7 - 0.75 * atmos$tair
+
 # Scaling factors for high temperature inhibition (25 C = 1.0).
 # The factor "c" scales the deactivation to a value of 1.0 at 25C.
 # adjusting temperature 
+# "peak arrhenius function"
 
 fth25 = function(hd, se) {1 + exp((-hd + se*(physcon$tfrz+25)) / (physcon$rgas*(physcon$tfrz+25)))};
 leaf$vcmaxc = fth25 (leaf$vcmaxhd, leaf$vcmaxse);
@@ -122,15 +111,6 @@ leaf$theta_j = 0.90;
 
 leaf$colim_c3 = 0.98;
 
-# Empirical curvature parameters for C4 co-limitation
-
-# leaf$colim_c4a = 0.80;
-# leaf$colim_c4b = 0.95;
-
-# --- C4: Quantum yield (mol CO2 / mol photons)
-
-# leaf$qe_c4 = 0.05;
-
 # --- Stomatal conductance parameters (We use C3 and Ball-Berry)
 
 leaf$g0 = 0.01;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
@@ -138,38 +118,18 @@ leaf$g1 = 9.0;        # Ball-Berry slope of conductance-photosynthesis relations
 
 # --- Leaf dimension (m)
 
-# leaf$dleaf = 0.05;
 leaf$dleaf = 0.1;
 
 # --- Leaf emissivity
 
 leaf$emiss = 0.97;
-# leaf$emiss = 0.98;
 
 # --- Leaf reflectance and transmittance: visible and near-infrared wavebands
-
-# example values:
-# par_reflect_3       = 0.057; PAR leaf reflectivity    = rho vis
-# par_trans_3         = 0.048; PAR leaf transmissivity  = tau vis
-# par_soil_refl_dry_3 = 0.1; PAR soil reflectivitiy
-# nir_reflect_3       = 0.43; NIR leaf reflectivity     = rho nir
-# nir_trans_3         = 0.26; NIR leaf transmissivity   = tau nir
-# nir_soil_refl_dry_3 = 0.1; NIR soil reflectivitiy
-
 
 leaf$rho[params$vis] = 0.057;
 leaf$tau[params$vis] = 0.048;
 leaf$rho[params$nir] = 0.43;
 leaf$tau[params$nir] = 0.26;
-
-# original values
-
-# leaf$rho[params$vis] = 0.10;
-# leaf$tau[params$vis] = 0.10;
-# leaf$rho[params$nir] = 0.40;
-# leaf$tau[params$nir] = 0.40;
-
-
 
 return(leaf)
 }

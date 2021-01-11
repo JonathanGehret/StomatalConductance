@@ -70,7 +70,7 @@ leaftype = 'sun';
 
 # Atmospheric CO2 (umol/mol) and O2 (mmol/mol)
 
-atmos$co2air = 380;
+atmos$co2air = 450;
 atmos$o2air = 0.209 * 1000;
 
 # Air temperature (K) and relative humidity (#)
@@ -116,7 +116,7 @@ atmos$cpair = physcon$cpd * (1 + (physcon$cpw/physcon$cpd - 1) * atmos$qair) * a
 
 # Atmospheric longwave radiation (W/m2)
 
-atmos$irsky = 400;
+# atmos$irsky = 400;
 
 # Solar radiation (W/m2)
 
