@@ -5,8 +5,8 @@
 
 params = list()
 physcon = list()
-inputatmos = list()
-flux = flux()
+atmos = list()
+flux = list()
 leaf = list()
 ground = list()
 
@@ -26,14 +26,14 @@ ground = list()
 
 Hainich5Days = read.csv("5_days.csv",header = T, dec = ",", sep = ";")
 # inputatmos$eair = Hainich5Days$ea * 1000
-atmos$tair = Hainich5Days$TA_F + 273.15
-atmos$co2air = Hainich5Days$CO2
+atmos$tair_i = Hainich5Days$TA_F + 273.15
+atmos$co2air_i = Hainich5Days$CO2
 atmos$relhum = Hainich5Days$RH
 atmos$wind = Hainich5Days$WS_F
 atmos$patm = Hainich5Days$PA_F * 1000
 atmos$irsky = Hainich5Days$LW_IN_F
 atmos$swr = Hainich5Days$SW_IN_F
-atmos$eair = 0.61094*exp((17.625*atmos$tair)/(atmos$tair+243.04))
+atmos$eair = 0.61094*exp((17.625*atmos$tair_i)/(atmos$tair_i+243.04))
 atmos$qair = physcon$mmh2o / physcon$mmdry * atmos$eair / (atmos$patm - (1 - physcon$mmh2o/physcon$mmdry) * atmos$eair);
 atmos$o2air = 0.209 * 1000;           # Atmospheric  and O2 (mmol/mol)
 atmos$rhomol = atmos$patm / (physcon$rgas * atmos$tair); # Molar density (mol/m3)
@@ -71,11 +71,11 @@ flux$gbc = 0.517
 
 
 # Test value leaf temperature
-flux$tleaf = atmos$tair;
+flux$tleaf_i = atmos$tair_i;
 
 #####
 
-StomatalConductance = function(flux,leaf,params,physcon,atmos){
+StomatalConductanceLeafPhotosynthesis = function(flux,leaf,params,physcon,atmos){
 
 # -------------------------------------------------------------------------
 # Calculate leaf gas exchange coupled with the leaf energy budget for C3
@@ -86,6 +86,7 @@ StomatalConductance = function(flux,leaf,params,physcon,atmos){
 source("satvap.R")
 source("LeafPhysiologyParams.R")
 source("LeafFluxes.R")
+source("LeafPhotosynthesis.R")
 
 # --- Waveband indices for visible and near-infrared
 
@@ -102,34 +103,34 @@ params$vis = 1; params$nir = 2
 
 leaf = LeafPhysiologyParams(params,physcon,leaf);
 
-testlist = c()
+testlist = data.frame()
 
-loop_i = list()
+#loop_i = list()
 for (i in 1:240){
   
   #params = list()
   #physcon = list()
-  loop_i$co2air_i = atmos$co2air[i]
-  loop_i$tair_i = atmos$tair[i]
-  testfunction(tair_i)
-  loop_i$tleaf = flux$tleaf[i]
+  atmos$co2air = atmos$co2air_i[i]
+  atmos$tair = atmos$tair_i[i]
+  # testfunction(tair_i)
+  flux$tleaf = flux$tleaf_i[i]
   #flux_i = flux[i]
   #leaf = list()
   #ground = list()
   # leafphysiologyparams if vcmaxse, jmaxse and rdse dependent on atmos$tair
   flux = LeafPhotosynthesis(physcon, atmos, leaf, flux)
-  testlist[i] = atmos$co2air_i
+  testlist[i] = flux
   
 
-  return(print(testlist))
+  #return(print(testlist))
 }
 
 
 # --- Flux calculations for 20 leaves with dleaf = 1 - 20 cm
 
-for (p in 1:20) {
+# for (p in 1:20) {
   
-  leaf$dleaf = p / 100;
+  #leaf$dleaf = p / 100;
   
   # --- Initial leaf temperature
   
@@ -159,7 +160,7 @@ for (p in 1:20) {
   x10 = flux$gs;
   
   LeafFluxes_output[p] = c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10)
-}
+#}
 
 # --- Plot data
 

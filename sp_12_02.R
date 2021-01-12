@@ -2,7 +2,7 @@
 
 # write as function?
 
-# StomatalConductance = function(flux,leaf,params,physcon,atmos)
+sp_12_02 = function(flux,leaf,params,physcon,atmos){
 
 # -------------------------------------------------------------------------
   # Calculate leaf gas exchange coupled with the leaf energy budget for C3
@@ -14,6 +14,7 @@
 source("satvap.R")
 source("LeafPhysiologyParams.R")
 source("LeafFluxes.R")
+source("LeafBoundaryLayer.R") 
 
 # will get these from elsewhere later, or by iterating. Where startpioint?
 params = list()
@@ -21,7 +22,7 @@ physcon = list()
 atmos = list()
 flux = list()
 leaf = list()
-ground = list()
+#ground = list()
 
 # --- Waveband indices for visible and near-infrared
 
@@ -135,12 +136,12 @@ atmos$swsky[params$nir] = 0.5 * fsds;   # short wave sky
 
 # --- Ground variables
 
-ground$albsoi[params$vis] = 0.1;      # Soil albedo (visible waveband)
-ground$albsoi[params$nir] = 0.2;      # Soil albedo (near-infrared waveband)
+#ground$albsoi[params$vis] = 0.1;      # Soil albedo (visible waveband)
+#ground$albsoi[params$nir] = 0.2;      # Soil albedo (near-infrared waveband)
 
 
-tg = atmos$tair;
-ground$irgrd = physcon$sigma * tg^4;
+#tg = atmos$tair;
+#ground$irgrd = physcon$sigma * tg^4;
 
 # --- Radiation absorbed by leaf (from gourp 3)
 
@@ -161,17 +162,21 @@ flux$qa = flux$swflx[params$vis] + flux$swflx[params$nir] + leaf$emiss * (atmos$
 
 # --- Flux calculations for 20 leaves with dleaf = 1 - 20 cm
 
-for (p in 1:20) {
+#for (p in 1:20) {
 
-leaf$dleaf = p / 100;
+#leaf$dleaf = p / 100;
 
 # --- Initial leaf temperature
 
 flux$tleaf = atmos$tair;
 
+help_list = list(flux,leaf,params,physcon,atmos)
+
+return(help_list)
+}
 # --- Leaf temperature, energy fluxes, photosynthesis, and stomatal conductance
 
-flux = LeafFluxes (physcon, atmos, leaf, flux);
+#flux = LeafFluxes (physcon, atmos, leaf, flux);
 
 # --- Save data for output
 # either create vectores x1...x10, add a value each itereation to each one and combine in the end
@@ -179,31 +184,31 @@ flux = LeafFluxes (physcon, atmos, leaf, flux);
 # and x1[p] = leaf$dleaf... x10[p] = flux$gs;
 # or add all of them to a data.frame from the beginning, like here
 
-LeafFluxes_output = data.frame()
+#LeafFluxes_output = data.frame()
 
-x1 = leaf$dleaf * 100;             # m -> cm
-x2 = flux$apar;
-x3 = flux$tleaf - physcon$tfrz;    # K -> oC
-x4 = flux$qa;
-x5 = flux$lhflx;
-x6 = flux$etflx * 1000;            # mol H2O/m2/s -> mmol H2O/m2/s
-x7 = flux$an;
-x8 = flux$an / flux$etflx * 0.001; # mmol CO2 / mol H2O
-x9 = flux$gbh;
-x10 = flux$gs;
+#x1 = leaf$dleaf * 100;             # m -> cm
+#x2 = flux$apar;
+#x3 = flux$tleaf - physcon$tfrz;    # K -> oC
+#x4 = flux$qa;
+#x5 = flux$lhflx;
+#x6 = flux$etflx * 1000;            # mol H2O/m2/s -> mmol H2O/m2/s
+#x7 = flux$an;
+#x8 = flux$an / flux$etflx * 0.001; # mmol CO2 / mol H2O
+#x9 = flux$gbh;
+#x10 = flux$gs;
 
-LeafFluxes_output[p] = c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10)
-}
+#LeafFluxes_output[p] = c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10)
+#}
 
 # --- Plot data
 
-plot(LeafFluxes_output[x1],LeafFluxes_output[x3], xlab = 'Leaf dimension (cm)', ylab = 'Leaf temperature (°C)')
+#plot(LeafFluxes_output[x1],LeafFluxes_output[x3], xlab = 'Leaf dimension (cm)', ylab = 'Leaf temperature (°C)')
 
 # --- Write data to output file
 
 # A = [x1; x2; x3; x4; x5; x6; x7; x8; x9; x10];
 
-write.table(LeafFluxes_output,"data.txt")
+#write.table(LeafFluxes_output,"data.txt")
 # filename = 'data.txt';
 # fileID = fopen(filename,'w');
 #fprintf(fileID,'#10.3f #10.3f #10.3f #10.3f #10.3f #10.3f #10.3f #10.3f #10.5f #10.5f\n', A);

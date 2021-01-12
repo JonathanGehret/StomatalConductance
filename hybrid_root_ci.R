@@ -2,6 +2,14 @@
 # set func = CiFunc
 
 
+#testing_values
+ci0 = 0.7 * atmos$co2air;
+ci1 = ci0 * 0.99;
+
+xa = ci0
+xb = ci1
+tol = 0.1;     
+
 # function hybrid_root specifically for CiFunc
 
 hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
@@ -30,11 +38,12 @@ hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
   
   x0 = xa;
   flux_f0 = CiFunc(physcon, atmos, leaf, flux, x0);
-  flux = flux_f0[1]
-  f0 = flux_f0[2]
+  flux = flux_f0[[1]]
+  f0 = flux_f0[[2]]
   if (f0 == 0) {
     root = x0;
-    return(list(flux,root)) #what about this return?
+    hybrid_root_ci_output = list(flux,root)
+    return(hybrid_root_ci_output) #what about this return?
   }
   
   
@@ -44,11 +53,12 @@ hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
   
   x1 = xb;
   flux_f1 = CiFunc(physcon, atmos, leaf, flux, x1);
-  flux = flux_f1[1]
-  f1 = flux_f1[2]
+  flux = flux_f1[[1]]
+  f1 = flux_f1[[2]]
   if (f1 == 0) {
     root = x1;
-    return(list(flux,root)) #same as above
+    hybrid_root_ci_output = list(flux,root)
+    return(hybrid_root_ci_output) #same as above
   }
   
   # --- Order initial root estimates correctly
@@ -82,8 +92,8 @@ hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
     f0 = f1;
     x1 = x;
     flux_f1 = CiFunc (physcon, atmos, leaf, flux, x1);
-    flux = flux_f1[1]
-    f1 = flux_f1[2]
+    flux = flux_f1[[1]]
+    f1 = flux_f1[[2]]
     if (f1 < minf){
       minx = x1;
       minf = f1;
@@ -94,8 +104,8 @@ hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
     
     if (f1 * f0 < 0){
       flux_x = brent_root_ci (physcon, atmos, leaf, flux, x0, x1, tol);
-      flux = flux_x[1]
-      x = flux_x[2]
+      flux = flux_x[[1]]
+      x = flux_x[[2]]
       x0 = x;
       break
     }
@@ -104,8 +114,8 @@ hybrid_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol){
     
     if (iter == itmax) {
       flux_f1 = CiFunc (physcon, atmos, leaf, flux, minx);
-      flux = flux_f1[1]
-      f1 = flux_f1[2]
+      flux = flux_f1[[1]]
+      f1 = flux_f1[[2]]
       x0 = minx;
     }
     

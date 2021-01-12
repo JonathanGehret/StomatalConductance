@@ -1,3 +1,9 @@
+
+#testing
+#ci_val = xa
+#ci_val = xb
+ci_val = 315
+
 CiFunc = function(physcon, atmos, leaf, flux, ci_val){
   
 library("signal")
@@ -106,14 +112,14 @@ esat = satvap ((flux$tleaf-physcon$tfrz));
 
 term = flux$an / flux$cs;
 if (flux$an > 0){
-#  aquad = 1;
-#  bquad = flux$gbv - leaf$g0 - leaf$g1 * term;
-#  cquad = -flux$gbv * (leaf$g0 + leaf$g1 * term * atmos$eair / esat);
-#  pcoeff = c(aquad,bquad,cquad);
-#  proots = roots(pcoeff);
-#  flux$gs = max(proots[1], proots[2]);
+  aquad = 1;
+  bquad = flux$gbv - leaf$g0 - leaf$g1 * term;
+  cquad = -1 * flux$gbv * (leaf$g0 + leaf$g1 * term * atmos$eair / esat);
+  pcoeff = c(aquad,bquad,cquad);
+  proots = roots(pcoeff);
+  flux$gs = max(proots[1], proots[2]);
 # is this enough for ball berry? or ue the plynomial thing?
-  flux$gs = leaf$g0 + leaf$g1 * term * atmos$eair / esat;
+#  flux$gs = leaf$g0 + leaf$g1 * term * atmos$eair / esat;
 } else {
   flux$gs = leaf$g0;
 }
@@ -136,6 +142,9 @@ if (flux$an >= 0){
 } else {
   ci_dif = 0;
 }
+
+#testing
+#ci_dif = 10.57
 
 CiFunc_output = list(flux,ci_dif)
 return(CiFunc_output)

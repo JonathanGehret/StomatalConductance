@@ -2,17 +2,28 @@
 
 LeafPhotosynthesis = function(physcon, atmos, leaf, flux){
   
+source("sp_12_02.R")  
 source("hybrid_root_ci.R")
 source("satvap.R")
 source("CiFunc.R")
 library("signal")
 library("pracma")
+#source("LeafBoundaryLayer.R") 
   
 # for testing purposes:
   # 1.: get physcon, atmos,leaf from sp_12_02.R (leaf via LeafPhysiologyParams.R)
+#params = list()
+#physcon = list()
+#atmos = list()
+#flux = list()
+#leaf = list()
+
+#helplist = sp_12_02(flux,leaf,params,physcon,atmos)
+  
   # 2. set initial leaf temperature:
-flux$tleaf = atmos$tair;
+#flux$tleaf = atmos$tair;
   # 3. get flux$gbv, flux$gbc, flux$apar from LeafBoundaryLayer.R
+flux = LeafBoundaryLayer(physcon, atmos, leaf, flux)
   # testing with these values return gs = 0.01, which is plausible
     
 # Calculate leaf photosynthesis using one of two methods:
@@ -127,6 +138,12 @@ proots = roots(pcoeff);
 # polyroot(R) = roots(m), but reversed order
 # pcoeff = c(cquad,bquad,aquad);
 # proots = polyroot(pcoeff)
+#is.complex(proots[1])
+#is.complex(proots[2])
+#Re(proots[1])
+#Im(proots[1])
+#Re(proots[2])
+#Im(proots[2])
 flux$je = min(proots[1], proots[2]);
 
 # --- Ci calculation
@@ -147,7 +164,7 @@ tol = 0.1;                 # Accuracy tolerance for Ci (umol/mol)
 
 flux_dummy = hybrid_root_ci (physcon, atmos, leaf, flux, ci0, ci1, tol); 
 flux = flux_dummy[[1]] # careful about lists!
-flux = flux[[1]]
+#flux = flux[[1]]
 flux$ci = flux_dummy[[2]];
 
 # --- Relative humidity and vapor pressure at leaf surface
