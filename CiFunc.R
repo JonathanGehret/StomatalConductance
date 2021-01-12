@@ -2,7 +2,7 @@
 #testing
 #ci_val = xa
 #ci_val = xb
-ci_val = 315
+#ci_val = 315
 
 CiFunc = function(physcon, atmos, leaf, flux, ci_val){
   
@@ -68,7 +68,7 @@ flux$aj = flux$je * max(ci_val - flux$cp, 0) / (4 * ci_val + 8 * flux$cp);
 
 # --- Net photosynthesis as the minimum or co-limited rate
 
-if (leaf$colim == 1) { #Use co-limitation
+#if (leaf$colim == 1) { #Use co-limitation
 
 # First co-limit Ac and Aj. Ai is the intermediate co-limited photosynthesis
 # rate found by solving the polynomial: aquad*Ai^2 + bquad*Ai + cquad = 0 for Ai.
@@ -81,7 +81,7 @@ pcoeff = c(aquad,bquad,cquad);
 proots = roots(pcoeff);
 ai = min(proots[1], proots[2]);
 flux$ag = ai;
-}
+#}
 
 # Prevent photosynthesis from ever being negative
 
@@ -145,7 +145,6 @@ if (flux$an >= 0){
 
 #testing
 #ci_dif = 10.57
-
 CiFunc_output = list(flux,ci_dif)
 return(CiFunc_output)
 

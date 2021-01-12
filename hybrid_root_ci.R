@@ -3,12 +3,12 @@
 
 
 #testing_values
-ci0 = 0.7 * atmos$co2air;
-ci1 = ci0 * 0.99;
+#ci0 = 0.7 * atmos$co2air;
+#ci1 = ci0 * 0.99;
 
-xa = ci0
-xb = ci1
-tol = 0.1;     
+#xa = ci0
+#xb = ci1
+#tol = 0.1;     
 
 # function hybrid_root specifically for CiFunc
 

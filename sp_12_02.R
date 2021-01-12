@@ -2,7 +2,7 @@
 
 # write as function?
 
-sp_12_02 = function(flux,leaf,params,physcon,atmos){
+#sp_12_02 = function(flux,leaf,params,physcon,atmos){
 
 # -------------------------------------------------------------------------
   # Calculate leaf gas exchange coupled with the leaf energy budget for C3
@@ -22,7 +22,7 @@ physcon = list()
 atmos = list()
 flux = list()
 leaf = list()
-#ground = list()
+ground = list()
 
 # --- Waveband indices for visible and near-infrared
 
@@ -117,7 +117,7 @@ atmos$cpair = physcon$cpd * (1 + (physcon$cpw/physcon$cpd - 1) * atmos$qair) * a
 
 # Atmospheric longwave radiation (W/m2)
 
-# atmos$irsky = 400;
+atmos$irsky = 400;
 
 # Solar radiation (W/m2)
 
@@ -136,12 +136,12 @@ atmos$swsky[params$nir] = 0.5 * fsds;   # short wave sky
 
 # --- Ground variables
 
-#ground$albsoi[params$vis] = 0.1;      # Soil albedo (visible waveband)
-#ground$albsoi[params$nir] = 0.2;      # Soil albedo (near-infrared waveband)
+ground$albsoi[params$vis] = 0.1;      # Soil albedo (visible waveband)
+ground$albsoi[params$nir] = 0.2;      # Soil albedo (near-infrared waveband)
 
 
-#tg = atmos$tair;
-#ground$irgrd = physcon$sigma * tg^4;
+tg = atmos$tair;
+ground$irgrd = physcon$sigma * tg^4;
 
 # --- Radiation absorbed by leaf (from gourp 3)
 
@@ -170,10 +170,10 @@ flux$qa = flux$swflx[params$vis] + flux$swflx[params$nir] + leaf$emiss * (atmos$
 
 flux$tleaf = atmos$tair;
 
-help_list = list(flux,leaf,params,physcon,atmos)
+#help_list = list(flux,leaf,params,physcon,atmos)
 
-return(help_list)
-}
+#return(help_list)
+#}
 # --- Leaf temperature, energy fluxes, photosynthesis, and stomatal conductance
 
 #flux = LeafFluxes (physcon, atmos, leaf, flux);

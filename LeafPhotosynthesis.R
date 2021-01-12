@@ -2,7 +2,7 @@
 
 LeafPhotosynthesis = function(physcon, atmos, leaf, flux){
   
-source("sp_12_02.R")  
+#source("sp_12_02.R")  
 source("hybrid_root_ci.R")
 source("satvap.R")
 source("CiFunc.R")
