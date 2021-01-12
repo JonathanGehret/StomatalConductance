@@ -79,6 +79,10 @@ bquad = -(flux$ac + flux$aj);
 cquad = flux$ac * flux$aj;
 pcoeff = c(aquad,bquad,cquad);
 proots = roots(pcoeff);
+#if (is.complex(proots[1])){proots[1] = 0}
+#if (is.complex(proots[2])){proots[2] = 0}
+proots[1] = Re(proots[1]);
+proots[2] = Re(proots[2]);
 ai = min(proots[1], proots[2]);
 flux$ag = ai;
 #}
@@ -117,6 +121,10 @@ if (flux$an > 0){
   cquad = -1 * flux$gbv * (leaf$g0 + leaf$g1 * term * atmos$eair / esat);
   pcoeff = c(aquad,bquad,cquad);
   proots = roots(pcoeff);
+  #if (is.complex(proots[1])){proots[1] = 0}
+  #if (is.complex(proots[2])){proots[2] = 0}
+  proots[1] = Re(proots[1]);
+  proots[2] = Re(proots[2]);
   flux$gs = max(proots[1], proots[2]);
 # is this enough for ball berry? or ue the plynomial thing?
 #  flux$gs = leaf$g0 + leaf$g1 * term * atmos$eair / esat;

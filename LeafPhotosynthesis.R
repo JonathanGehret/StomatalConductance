@@ -23,7 +23,7 @@ library("pracma")
   # 2. set initial leaf temperature:
 #flux$tleaf = atmos$tair;
   # 3. get flux$gbv, flux$gbc, flux$apar from LeafBoundaryLayer.R
-flux = LeafBoundaryLayer(physcon, atmos, leaf, flux)
+# flux = LeafBoundaryLayer(physcon, atmos, leaf, flux)
   # testing with these values return gs = 0.01, which is plausible
     
 # Calculate leaf photosynthesis using one of two methods:
@@ -134,16 +134,7 @@ aquad = leaf$theta_j;
 bquad = -(qabs + flux$jmax);
 cquad = qabs * flux$jmax;
 pcoeff = c(aquad,bquad,cquad);
-proots = roots(pcoeff); 
-# polyroot(R) = roots(m), but reversed order
-# pcoeff = c(cquad,bquad,aquad);
-# proots = polyroot(pcoeff)
-#is.complex(proots[1])
-#is.complex(proots[2])
-#Re(proots[1])
-#Im(proots[1])
-#Re(proots[2])
-#Im(proots[2])
+proots = roots(pcoeff);
 flux$je = min(proots[1], proots[2]);
 
 # --- Ci calculation
