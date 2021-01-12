@@ -26,7 +26,7 @@
 
 Hainich5Days = read.csv("5_days.csv",header = T, dec = ",", sep = ";")
 # inputatmos$eair = Hainich5Days$ea * 1000
-atmos$time_i = Hainich5Days$Date.Time
+atmos$time = Hainich5Days$Date.Time
 atmos$tair_i = Hainich5Days$TA_F + 273.15
 atmos$co2air_i = Hainich5Days$CO2
 atmos$relhum = Hainich5Days$RH
