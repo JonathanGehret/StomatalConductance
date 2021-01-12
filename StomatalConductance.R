@@ -3,12 +3,12 @@
 # write as function?
 
 
-params = list()
-physcon = list()
-atmos = list()
-flux = list()
-leaf = list()
-ground = list()
+#params = list()
+#physcon = list()
+#atmos = list()
+#flux = list()
+#leaf = list()
+#ground = list()
 
 
 # -------------------------------------------------------------------------
@@ -349,6 +349,20 @@ output_angs = data.frame(
   )
 
 write.csv(output_angs,file = "testoutputs1")
+
+plot(output_an ~ output_gs)
+plot(output_an ~ atmos$tair_i)
+plot(output_an ~ atmos$eair)
+plot(output_an ~ Hainich5Days$NIGHT)
+plot(output_an ~ Hainich5Days$TIMESTAMP_END, type = "l")
+
+plot(output_gs ~ output_gs)
+plot(output_gs ~ atmos$tair_i)
+plot(output_gs ~ atmos$eair)
+plot(output_gs ~ Hainich5Days$NIGHT)
+plot(output_gs ~ Hainich5Days$TIMESTAMP_END, type = "l")
+
+
 
 # --- Flux calculations for 20 leaves with dleaf = 1 - 20 cm
 
