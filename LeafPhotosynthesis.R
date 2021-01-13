@@ -127,8 +127,6 @@ flux$rd = leaf$rd25 * t1 * t2;
 # Solve the polynomial: aquad*Je^2 + bquad*Je + cquad = 0
 # for Je. Correct solution is the smallest of the two roots.
 
-# if (leaf$c3psn == 1) 1 = C3
-
 qabs = 0.5 * leaf$phi_psii * flux$apar;
 aquad = leaf$theta_j;
 bquad = -(qabs + flux$jmax);

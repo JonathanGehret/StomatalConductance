@@ -1,5 +1,3 @@
-# function [esat, desat] = satvap (tc)
-
 satvap = function(tc){
 
 # Compute saturation vapor pressure and change in saturation vapor pressure
@@ -21,20 +19,14 @@ a8 =  0.209339997e-15;   b8 =  0.381294516e-16;
 
 
 tc = min(tc, 100);
-# tc = max(tc, -75);
 
 # --- Saturation vapor pressure (esat, mb) and derivative (desat, mb)
 
 esat  = a0 + tc*(a1 + tc*(a2 + tc*(a3 + tc*(a4 + tc*(a5 + tc*(a6 + tc*(a7 + tc*a8)))))));
-#  desat = b0 + tc*(b1 + tc*(b2 + tc*(b3 + tc*(b4 + tc*(b5 + tc*(b6 + tc*(b7 + tc*b8)))))));
-
 
 # --- Convert from mb to Pa
 
 esat  = esat  * 100;
-# desat = desat * 100;
-
-# esat_desat = data.frame(esat,desat)
 
 return(esat)
 
