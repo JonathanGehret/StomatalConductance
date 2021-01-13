@@ -29,25 +29,31 @@ Hainich5Days = read.csv("5_days.csv",header = T, dec = ",", sep = ";")
 atmos$time = Hainich5Days$Date.Time
 atmos$tair_i = Hainich5Days$TA_F + 273.15
 atmos$co2air_i = Hainich5Days$CO2
-atmos$relhum = Hainich5Days$RH
-atmos$wind = Hainich5Days$WS_F
-atmos$patm = Hainich5Days$PA_F * 1000
-atmos$irsky = Hainich5Days$LW_IN_F
-atmos$swr = Hainich5Days$SW_IN_F
+atmos$relhum_i = Hainich5Days$RH
+atmos$wind_i = Hainich5Days$WS_F
+atmos$patm_i = Hainich5Days$PA_F * 1000
+atmos$irsky_i = Hainich5Days$LW_IN_F  #from group 3
 
-atmos$eair = 0.61094*exp((17.625*atmos$tair_i)/(atmos$tair_i+243.04))
+# short wave radiation testing  values
+
+atmos$swr_i = Hainich5Days$SW_IN_F    #from gtoup 3
+atmos$swsky[params$vis] = 0.5 * atmos$swr;   # short wave sky
+atmos$swsky[params$nir] = 0.5 * atmos$swr;   # short wave sky
+
+# Vapor pressure (Pa) and specific humidity (kg/kg)
+# atmos$eair = 0.61094*exp((17.625*atmos$tair_i)/(atmos$tair_i+243.04))  # magnus_formula - use satvap instead?
 atmos$qair = physcon$mmh2o / physcon$mmdry * atmos$eair / (atmos$patm - (1 - physcon$mmh2o/physcon$mmdry) * atmos$eair);
-atmos$o2air = 0.209 * 1000;           # Atmospheric  and O2 (mmol/mol)
+
+atmos$o2air = 0.209 * 1000;           # Atmospheric O2 (mmol/mol)
+
 atmos$rhomol = atmos$patm / (physcon$rgas * atmos$tair); # Molar density (mol/m3)
 atmos$rhoair = atmos$rhomol * physcon$mmdry * (1 - (1 - physcon$mmh2o/physcon$mmdry) * atmos$eair / atmos$patm); # Air density (kg/m3)
 atmos$mmair = atmos$rhoair / atmos$rhomol;     # Molecular mass of air (kg/mol)
 atmos$cpair = physcon$cpd * (1 + (physcon$cpw/physcon$cpd - 1) * atmos$qair) * atmos$mmair; # Specific heat of air at constant pressure (J/mol/K)
-atmos$swsky[params$vis] = 0.5 * atmos$swr;   # short wave sky
-atmos$swsky[params$nir] = 0.5 * atmos$swr;   # short wave sky
 
 #   flux$apar           ! Leaf absorbed PAR (umol photon/m2 leaf/s)
 
-flux$apar = Hainich5Days$PPFD_IN - Hainich5Days$PPFD_OUT
+flux$apar_i = flux$apar
 
 ##### --- Physical constants ####
 
@@ -105,18 +111,25 @@ params$vis = 1; params$nir = 2
 
 leaf = LeafPhysiologyParams(params,physcon,leaf);
 
+#creating output files for an and gs
+
 output_an = c()
 output_gs = c()
+
+#running time loop over five days, calculating an and gs with different values for co2air and tair and tleaf
 
 for (i in 1:240){
   atmos$co2air = atmos$co2air_i[i]
   atmos$tair = atmos$tair_i[i]
   flux$tleaf = flux$tleaf_i[i]
   
-  # leafphysiologyparams if vcmaxse, jmaxse and rdse dependent on atmos$tair
+  # Enthalpy for rd, vcmax, jmax in combination with tair
   # leaf$rdse = 
   leaf$vcmaxse = 668.39 - 1.07 * atmos$tair
   leaf$jmaxse = 659.7 - 0.75 * atmos$tair
+  
+  # add radiation (from group 3)
+  flux$apar = flux$apar_i[i]
   
   
   LeafPhotosynthesis = function(physcon, atmos, leaf, flux){
@@ -348,7 +361,7 @@ output_angs = data.frame(
   gs = output_gs
   )
 
-write.csv(output_angs,file = "testoutputs1")
+write.csv(output_angs,file = "testoutputs2_with_PAR")
 
 plot(output_an ~ output_gs)
 plot(output_an ~ atmos$tair_i)
