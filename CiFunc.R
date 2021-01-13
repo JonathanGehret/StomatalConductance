@@ -56,11 +56,9 @@ library("pracma")
 #   ci_dif              ! Difference in Ci
 # ------------------------------------------------------
   
-  # --- Metabolic (demand-based) photosynthetic rate
-
-# if (leaf$c3psn == 1) 1 = C3
+# --- Metabolic (demand-based) photosynthetic rate
   
-  # C3: Rubisco-limited photosynthesis
+# C3: Rubisco-limited photosynthesis
 flux$ac = flux$vcmax * max(ci_val - flux$cp, 0) / (ci_val + flux$kc * (1 + atmos$o2air / flux$ko));
 
 # C3: RuBP regeneration-limited photosynthesis
@@ -79,10 +77,6 @@ bquad = -(flux$ac + flux$aj);
 cquad = flux$ac * flux$aj;
 pcoeff = c(aquad,bquad,cquad);
 proots = roots(pcoeff);
-#if (is.complex(proots[1])){proots[1] = 0}
-#if (is.complex(proots[2])){proots[2] = 0}
-proots[1] = Re(proots[1]);
-proots[2] = Re(proots[2]);
 ai = min(proots[1], proots[2]);
 flux$ag = ai;
 #}
@@ -121,13 +115,7 @@ if (flux$an > 0){
   cquad = -1 * flux$gbv * (leaf$g0 + leaf$g1 * term * atmos$eair / esat);
   pcoeff = c(aquad,bquad,cquad);
   proots = roots(pcoeff);
-  #if (is.complex(proots[1])){proots[1] = 0}
-  #if (is.complex(proots[2])){proots[2] = 0}
-  proots[1] = Re(proots[1]);
-  proots[2] = Re(proots[2]);
   flux$gs = max(proots[1], proots[2]);
-# is this enough for ball berry? or ue the plynomial thing?
-#  flux$gs = leaf$g0 + leaf$g1 * term * atmos$eair / esat;
 } else {
   flux$gs = leaf$g0;
 }
@@ -151,8 +139,6 @@ if (flux$an >= 0){
   ci_dif = 0;
 }
 
-#testing
-#ci_dif = 10.57
 CiFunc_output = list(flux,ci_dif)
 return(CiFunc_output)
 
