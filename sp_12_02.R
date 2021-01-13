@@ -66,7 +66,7 @@ leaf = LeafPhysiologyParams(params,physcon,leaf);
 
 # Process sunlit or shaded leaf
 
-leaftype = 'sun';
+# leaftype = 'sun';
 # leaftype = 'shade';
 
 # Atmospheric CO2 (umol/mol) and O2 (mmol/mol)
@@ -123,7 +123,10 @@ atmos$irsky = 400;
 
 # switch leaftype
 # case 'sun'
- fsds = 800;   # Sun leaf
+#fsds = 800;   # Sun leaf
+
+fsds = Hainich5Days$SW_IN_F
+
 # case 'shade'
 # fsds = 300;   # Shade leaf
 # end
@@ -131,8 +134,10 @@ atmos$irsky = 400;
 # par to W m^-2 ?
 # radiation replaced
 
-atmos$swsky[params$vis] = 0.5 * fsds;   # short wave sky
-atmos$swsky[params$nir] = 0.5 * fsds;   # short wave sky
+atmos$swskyvis = 0.5 * fsds;   # short wave sky
+
+#atmos$swsky[params$vis] = 0.5 * fsds;   # short wave sky
+#atmos$swsky[params$nir] = 0.5 * fsds;   # short wave sky
 
 # --- Ground variables
 
@@ -147,24 +152,26 @@ ground$irgrd = physcon$sigma * tg^4;
 
 # Solar radiation incident on leaf
 
-flux$swinc[params$vis] = atmos$swsky[params$vis] * (1 + ground$albsoi[params$vis]);
-flux$swinc[params$nir] = atmos$swsky[params$nir] * (1 + ground$albsoi[params$nir]);
+flux$swincvis = atmos$swskyvis * (1 + ground$albsoi[params$vis]);
+
+#flux$swinc[params$vis] = atmos$swsky[params$vis] * (1 + ground$albsoi[params$vis]);
+#flux$swinc[params$nir] = atmos$swsky[params$nir] * (1 + ground$albsoi[params$nir]);
 
 # Solar radiation absorbed by leaf
 
-flux$swflx[params$vis] = flux$swinc[params$vis] * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
-flux$swflx[params$nir] = flux$swinc[params$nir] * (1 - leaf$rho[params$nir] - leaf$tau[params$nir]);
-flux$apar = flux$swflx[params$vis] * 4.6;
+flux$swflxvis = flux$swincvis * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
 
-# Radiative forcing for leaf temperature calculation
 
-flux$qa = flux$swflx[params$vis] + flux$swflx[params$nir] + leaf$emiss * (atmos$irsky + ground$irgrd);
+#flux$swflx[params$vis] = flux$swinc[params$vis] * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
+#flux$swflx[params$nir] = flux$swinc[params$nir] * (1 - leaf$rho[params$nir] - leaf$tau[params$nir]);
+#flux$apar = flux$swflx[params$vis] * 4.6;
 
-# --- Flux calculations for 20 leaves with dleaf = 1 - 20 cm
+flux$apar = flux$swflxvis * 4.6;
 
-#for (p in 1:20) {
 
-#leaf$dleaf = p / 100;
+# Radiative forcing for leaf temperature calculation (not needed for an/gs)
+
+#flux$qa = flux$swflx[params$vis] + flux$swflx[params$nir] + leaf$emiss * (atmos$irsky + ground$irgrd);
 
 # --- Initial leaf temperature
 
