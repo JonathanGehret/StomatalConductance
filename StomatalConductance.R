@@ -34,8 +34,8 @@ atmos$eair_i = Hainich5Days$ea * 1000
 
 # short wave radiation testing  values
 
-atmos$swsky_i = Hainich5Days$SW_IN_F    #from group 3 #! SW radiation (W/m2)
-#fsds = Hainich5Days$SW_IN_F    #from group 3 #! SW radiation (W/m2)
+#atmos$swsky_i = Hainich5Days$SW_IN_F    #from group 3 #! SW radiation (W/m2)
+fsds = Hainich5Days$SW_IN_F    #from group 3 #! SW radiation (W/m2)
 #atmos$swsky[params$vis] = 0.5 * atmos$swr;   # short wave sky
 #atmos$swsky[params$nir] = 0.5 * atmos$swr;   # short wave sky
 
@@ -44,9 +44,12 @@ atmos$swsky_i = Hainich5Days$SW_IN_F    #from group 3 #! SW radiation (W/m2)
 #atmos$qair = physcon$mmh2o / physcon$mmdry * atmos$eair / (atmos$patm - (1 - physcon$mmh2o/physcon$mmdry) * atmos$eair);  #! specific humidity (kg/kg)
 
 
+# Test values for PAR
 #   flux$apar           ! Leaf absorbed PAR (umol photon/m2 leaf/s)
-
 #flux$apar_i = flux$apar
+flux$apar_i = PAR(leaf,fsds) 
+
+
 
 # Test value leaf temperature
 flux$tleaf_i = atmos$tair_i;
@@ -85,14 +88,14 @@ for (i in 1:240){
   leaf$vcmaxse = 668.39 - 1.07 * atmos$tair
   leaf$jmaxse = 659.7 - 0.75 * atmos$tair
   
-  # add radiation PAR (from group 3) not working yet
-  #flux$apar = PAR(leaf,fsds)   # fix in sp_12_02.R
+  # add radiation PAR (from group 3) 
+  flux$apar = flux$apar_i[i]
   #print(flux$apar)
   # testing PAR values == hainich shortwave radiation
-  flux$apar = atmos$swsky_i[i]
+  #flux$apar = atmos$swsky_i[i]
   #print(flux$apar)
   
-  # loop for eair (not working right now, stopping at loop 179 with:
+  # loop for eair (not working right now, stopping at loop 180 with:
   # "Fehler in if (flux$an > 0) { : Argument hat Länge 0 )"
   #atmos$relhum = atmos$relhum_i[i]
   #esat = satvap ((atmos$tair-physcon$tfrz)); 

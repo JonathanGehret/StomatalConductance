@@ -39,6 +39,6 @@ flux$swincvis = atmos$swskyvis * (1 + ground$albsoi[params$vis]);
 flux$swflxvis = flux$swincvis * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
 flux$apar = flux$swflxvis * 4.6;
 
-return(flux)
+return(flux$apar)
 
 }
