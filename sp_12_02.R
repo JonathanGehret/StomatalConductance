@@ -1,27 +1,17 @@
-# Supplemental program 12.2
-
-# write as function?
-
-#sp_12_02 = function(flux,leaf,params,physcon,atmos){
+sp_12_02 = function(flux,leaf,physcon,atmos){
 
 # -------------------------------------------------------------------------
-  # Calculate leaf gas exchange coupled with the leaf energy budget for C3
-# and C4 plants. Leaf temperature is calculated from the energy balance.
+#Create physical constants, inital atmos values, leafphysiology params, inital fluxes
 # -------------------------------------------------------------------------
 
 # call these:
 
 source("satvap.R")
 source("LeafPhysiologyParams.R")
-source("LeafFluxes.R")
 source("LeafBoundaryLayer.R") 
 
 # will get these from elsewhere later, or by iterating. Where startpioint?
 params = list()
-physcon = list()
-atmos = list()
-flux = list()
-leaf = list()
 ground = list()
 
 # --- Waveband indices for visible and near-infrared
@@ -105,27 +95,27 @@ atmos$rhomol = atmos$patm / (physcon$rgas * atmos$tair);
 
 # Air density (kg/m3)
 
-atmos$rhoair = atmos$rhomol * physcon$mmdry * (1 - (1 - physcon$mmh2o/physcon$mmdry) * atmos$eair / atmos$patm);
+#atmos$rhoair = atmos$rhomol * physcon$mmdry * (1 - (1 - physcon$mmh2o/physcon$mmdry) * atmos$eair / atmos$patm);
 
 # Molecular mass of air (kg/mol)
 
-atmos$mmair = atmos$rhoair / atmos$rhomol;
+#atmos$mmair = atmos$rhoair / atmos$rhomol;
 
 # Specific heat of air at constant pressure (J/mol/K)
 
-atmos$cpair = physcon$cpd * (1 + (physcon$cpw/physcon$cpd - 1) * atmos$qair) * atmos$mmair;
+#atmos$cpair = physcon$cpd * (1 + (physcon$cpw/physcon$cpd - 1) * atmos$qair) * atmos$mmair;
 
 # Atmospheric longwave radiation (W/m2)
 
-atmos$irsky = 400;
+#atmos$irsky = 400;
 
 # Solar radiation (W/m2)
 
 # switch leaftype
 # case 'sun'
-#fsds = 800;   # Sun leaf
+fsds = 800;   # Sun leaf
 
-fsds = Hainich5Days$SW_IN_F
+#fsds = Hainich5Days$SW_IN_F
 
 # case 'shade'
 # fsds = 300;   # Shade leaf
@@ -134,10 +124,10 @@ fsds = Hainich5Days$SW_IN_F
 # par to W m^-2 ?
 # radiation replaced
 
-atmos$swskyvis = 0.5 * fsds;   # short wave sky
+#atmos$swskyvis = 0.5 * fsds;   # short wave sky
 
-#atmos$swsky[params$vis] = 0.5 * fsds;   # short wave sky
-#atmos$swsky[params$nir] = 0.5 * fsds;   # short wave sky
+atmos$swsky[params$vis] = 0.5 * fsds;   # short wave sky
+atmos$swsky[params$nir] = 0.5 * fsds;   # short wave sky
 
 # --- Ground variables
 
@@ -152,21 +142,22 @@ ground$irgrd = physcon$sigma * tg^4;
 
 # Solar radiation incident on leaf
 
-flux$swincvis = atmos$swskyvis * (1 + ground$albsoi[params$vis]);
+#flux$swincvis = atmos$swskyvis * (1 + ground$albsoi[params$vis]);
 
-#flux$swinc[params$vis] = atmos$swsky[params$vis] * (1 + ground$albsoi[params$vis]);
-#flux$swinc[params$nir] = atmos$swsky[params$nir] * (1 + ground$albsoi[params$nir]);
+flux$swinc[params$vis] = atmos$swsky[params$vis] * (1 + ground$albsoi[params$vis]);
+flux$swinc[params$nir] = atmos$swsky[params$nir] * (1 + ground$albsoi[params$nir]);
 
 # Solar radiation absorbed by leaf
 
-flux$swflxvis = flux$swincvis * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
+#flux$swflxvis = flux$swincvis * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
 
 
-#flux$swflx[params$vis] = flux$swinc[params$vis] * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
-#flux$swflx[params$nir] = flux$swinc[params$nir] * (1 - leaf$rho[params$nir] - leaf$tau[params$nir]);
-#flux$apar = flux$swflx[params$vis] * 4.6;
+flux$swflx[params$vis] = flux$swinc[params$vis] * (1 - leaf$rho[params$vis] - leaf$tau[params$vis]);
+flux$swflx[params$nir] = flux$swinc[params$nir] * (1 - leaf$rho[params$nir] - leaf$tau[params$nir]);
+flux$apar = flux$swflx[params$vis] * 4.6;
 
-flux$apar = flux$swflxvis * 4.6;
+
+#flux$apar = flux$swflxvis * 4.6;
 
 
 # Radiative forcing for leaf temperature calculation (not needed for an/gs)
@@ -177,51 +168,10 @@ flux$apar = flux$swflxvis * 4.6;
 
 flux$tleaf = atmos$tair;
 
-#help_list = list(flux,leaf,params,physcon,atmos)
+flux = LeafBoundaryLayer(physcon, atmos, leaf, flux)
 
-#return(help_list)
-#}
-# --- Leaf temperature, energy fluxes, photosynthesis, and stomatal conductance
+fluxleafphysconatmos = list(flux,leaf,physcon,atmos)
 
-#flux = LeafFluxes (physcon, atmos, leaf, flux);
+return(fluxleafphysconatmos)
 
-# --- Save data for output
-# either create vectores x1...x10, add a value each itereation to each one and combine in the end
-# using x1 = c()....x10 = c()
-# and x1[p] = leaf$dleaf... x10[p] = flux$gs;
-# or add all of them to a data.frame from the beginning, like here
-
-#LeafFluxes_output = data.frame()
-
-#x1 = leaf$dleaf * 100;             # m -> cm
-#x2 = flux$apar;
-#x3 = flux$tleaf - physcon$tfrz;    # K -> oC
-#x4 = flux$qa;
-#x5 = flux$lhflx;
-#x6 = flux$etflx * 1000;            # mol H2O/m2/s -> mmol H2O/m2/s
-#x7 = flux$an;
-#x8 = flux$an / flux$etflx * 0.001; # mmol CO2 / mol H2O
-#x9 = flux$gbh;
-#x10 = flux$gs;
-
-#LeafFluxes_output[p] = c(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10)
-#}
-
-# --- Plot data
-
-#plot(LeafFluxes_output[x1],LeafFluxes_output[x3], xlab = 'Leaf dimension (cm)', ylab = 'Leaf temperature (°C)')
-
-# --- Write data to output file
-
-# A = [x1; x2; x3; x4; x5; x6; x7; x8; x9; x10];
-
-#write.table(LeafFluxes_output,"data.txt")
-# filename = 'data.txt';
-# fileID = fopen(filename,'w');
-#fprintf(fileID,'#10.3f #10.3f #10.3f #10.3f #10.3f #10.3f #10.3f #10.3f #10.5f #10.5f\n', A);
-# fclose(fileID);
-
-
-# return xxx
-
-# }
+}

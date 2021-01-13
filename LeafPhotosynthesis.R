@@ -1,5 +1,3 @@
-# function [flux] = LeafPhotosynthesis (physcon, atmos, leaf, flux)
-
 LeafPhotosynthesis = function(physcon, atmos, leaf, flux){
   
 #source("sp_12_02.R")  
@@ -8,32 +6,11 @@ source("satvap.R")
 source("CiFunc.R")
 library("signal")
 library("pracma")
-#source("LeafBoundaryLayer.R") 
-  
-# for testing purposes:
-  # 1.: get physcon, atmos,leaf from sp_12_02.R (leaf via LeafPhysiologyParams.R)
-#params = list()
-#physcon = list()
-#atmos = list()
-#flux = list()
-#leaf = list()
 
-#helplist = sp_12_02(flux,leaf,params,physcon,atmos)
-  
-  # 2. set initial leaf temperature:
-#flux$tleaf = atmos$tair;
-  # 3. get flux$gbv, flux$gbc, flux$apar from LeafBoundaryLayer.R
-# flux = LeafBoundaryLayer(physcon, atmos, leaf, flux)
-  # testing with these values return gs = 0.01, which is plausible
-    
-# Calculate leaf photosynthesis using one of two methods:
-  # (1) Calculate leaf photosynthesis and stomatal conductance
+# Calculate leaf photosynthesis and stomatal conductance
 # by solving for the value of Ci that satisfies the
 # metabolic, stomatal constraint, and diffusion equations.
 # This is used with the Ball-Berry style stomatal models.
-# (2) Calculate leaf photosynthesis for a specified stomatal
-# conductance. Then calculate Ci from the diffusion equation.
-# This is used with the WUE stomatal optimization.
 
 # ------------------------------------------------------
   # Input
@@ -98,8 +75,6 @@ library("pracma")
 # ------------------------------------------------------
   
   # --- Adjust photosynthetic parameters for temperature
-
-# if (leaf$c3psn == 1) 1 = C3
   
   # C3 temperature response
 
@@ -136,12 +111,9 @@ proots = roots(pcoeff);
 flux$je = min(proots[1], proots[2]);
 
 # --- Ci calculation
-
-# if (leaf$gstyp <= 1) 1 = Ball-Berry
   
 # Initial estimates for Ci
 
-#if (leaf$c3psn == 1) 1 = C3
 ci0 = 0.7 * atmos$co2air;
 ci1 = ci0 * 0.99;
 
@@ -149,11 +121,11 @@ ci1 = ci0 * 0.99;
 # until the change in Ci is < tol. Ci has units umol/mol
 
 tol = 0.1;                 # Accuracy tolerance for Ci (umol/mol)
-# func_name = 'CiFunc';      # The function name
+
+# --- calculation of an and gs
 
 flux_dummy = hybrid_root_ci (physcon, atmos, leaf, flux, ci0, ci1, tol); 
-flux = flux_dummy[[1]] # careful about lists!
-#flux = flux[[1]]
+flux = flux_dummy[[1]] 
 flux$ci = flux_dummy[[2]];
 
 # --- Relative humidity and vapor pressure at leaf surface
@@ -171,7 +143,6 @@ if (flux$gs < 0) {
 # Compare with Ball-Berry model. The solution blows up with low eair. In input
 # data, eair should be > 0.05*esat to ensure that hs does not go to zero.
 
-#if (leaf.gstyp == 1){
 gs_err = leaf$g1 * max(flux$an, 0) * flux$hs / flux$cs + leaf$g0;
   if (abs(flux$gs-gs_err)*1e06 > 1e-04) {
     fprintf('gs = #15.4f\n', flux$gs)

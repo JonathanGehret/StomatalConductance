@@ -107,6 +107,10 @@ esat = satvap ((flux$tleaf-physcon$tfrz));
 # for gs given An: aquad*gs^2 + bquad*gs + cquad = 0. Correct
 # solution is the larger of the two roots. This solution is
 # valid for An >= 0. With An <= 0, gs = g0.
+print("an:")
+print(flux$an)
+print("cs:")
+print(flux$cs)
 
 term = flux$an / flux$cs;
 if (flux$an > 0){
