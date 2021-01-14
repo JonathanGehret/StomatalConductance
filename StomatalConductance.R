@@ -9,6 +9,8 @@ source("PAR.R")
   
 # read in Data
 Hainich5Days = read.csv("5_days.csv",header = T, dec = ",", sep = ";")
+#Hainich5Days = read.csv("5days_winter.csv",header = T, dec = ",", sep = ";")
+iter = length(Hainich5Days$Date.Time)
 
 #create empty lists
 flux = list()
@@ -72,7 +74,9 @@ output_gs = c()
 # without _i are the singular value taken from those vectors at the specific timestep i
 # add _i to list input() instead ?
 
-for (i in 1:240){
+# length of dataset
+
+for (i in 1:iter){
 
 # testing shorter loop times
 #for (i in 1:50){
@@ -128,7 +132,7 @@ output_angs = data.frame(
   gs = output_gs
   )
 
-write.csv(output_angs,file = "testoutputs4_with_PAR_and_eair")
+#write.csv(output_angs,file = "testoutputs8_Hanich_winter")
 
 plot(output_an ~ output_gs)
 #plot(output_an ~ atmos$tair_i)

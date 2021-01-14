@@ -50,6 +50,7 @@ LeafPhysiologyParams = function(params,physcon,leaf){
 # --- Vcmax and other parameters (at 25C)
 
 leaf$vcmax25 = 60;
+#leaf$vcmax25 = 120; #test value
 leaf$jmax25 = 1.67 * leaf$vcmax25;
 leaf$kp25_c4 = 0;
 leaf$rd25 = 0.015 * leaf$vcmax25;
@@ -67,11 +68,13 @@ leaf$koha = 36380;
 leaf$cpha = 37830;
 leaf$rdha = 46390;
 leaf$vcmaxha = 65330;
+#leaf$vcmaxha = 58520; #test value
 leaf$jmaxha  = 43540;
 
 # --- High temperature deactivation
 
 # Deactivation energy (J/mol)
+# J or kJ or mJ?
 
 leaf$rdhd = 150000;
 leaf$vcmaxhd = 150000;
@@ -115,6 +118,7 @@ leaf$colim_c3 = 0.98;
 
 leaf$g0 = 0.01;       # Ball-Berry minimum leaf conductance (mol H2O/m2/s)
 leaf$g1 = 9.0;        # Ball-Berry slope of conductance-photosynthesis relationship
+#leaf$g1 = 100.0;        # testing value
 
 # --- Leaf dimension (m)
 
