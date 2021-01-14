@@ -56,9 +56,13 @@ flux$tleaf_i = atmos$tair_i;
 
 #####
 
+# eair calculation
+#for (i in 1:240){
+#  esat[i] = satvap (atmos$tair_i[i]-physcon$tfrz); # vector
+#  atmos$eair_i[i] = esat[i] * (atmos$relhum_i[i] / 100); #! Vapor pressure of air (Pa)
+#}
 
 #creating output files for an and gs
-
 output_an = c()
 output_gs = c()
 
@@ -82,7 +86,7 @@ for (i in 1:240){
   #tleaf from group 4
   flux$tleaf = flux$tleaf_i[i]
   
-  # Enthalpy for rd, vcmax, jmax in combination with tair
+  # Entropy for rd, vcmax, jmax in combination with tair (J/mol/K)
   # move these inside LeafPhotosynthesis.R
   # leaf$rdse = 
   leaf$vcmaxse = 668.39 - 1.07 * atmos$tair
@@ -97,11 +101,10 @@ for (i in 1:240){
   
   # loop for eair (not working right now, stopping at loop 180 with:
   # "Fehler in if (flux$an > 0) { : Argument hat Länge 0 )"
-  #atmos$relhum = atmos$relhum_i[i]
-  #esat = satvap ((atmos$tair-physcon$tfrz)); 
-  #atmos$eair = esat * (atmos$relhum / 100); #! Vapor pressure of air (Pa)
-  #atmos$eair = atmos$eair_i[i]
-  #print(atmos$eair)  
+  atmos$relhum = atmos$relhum_i[i]
+  esat = satvap ((atmos$tair-physcon$tfrz)); 
+  atmos$eair = esat * (atmos$relhum / 100); #! Vapor pressure of air (Pa)
+  atmos$eair = atmos$eair_i[i]
   #print(esat)
   #print(atmos$relhum)
   #print(atmos$eair)
@@ -125,7 +128,7 @@ output_angs = data.frame(
   gs = output_gs
   )
 
-#write.csv(output_angs,file = "testoutputs3_with_PAR_and_eair")
+write.csv(output_angs,file = "testoutputs4_with_PAR_and_eair")
 
 plot(output_an ~ output_gs)
 #plot(output_an ~ atmos$tair_i)

@@ -25,11 +25,11 @@ brent_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol) {
   a = xa;
   b = xb;
   flux_fa = CiFunc(physcon, atmos, leaf, flux, a);
-  flux = flux_fa[1]
-  fa = flux_fa[2]
+  flux = flux_fa[[1]]
+  fa = flux_fa[[2]]
   flux_fb = CiFunc(physcon, atmos, leaf, flux, b);
-  flux = flux_fb[1]
-  fb = flux_fb[2]
+  flux = flux_fb[[1]]
+  fb = flux_fb[[2]]
   
   if ((fa > 0 & fb > 0) | (fa < 0 & fb < 0)){
     stop('brent_root error: root must be bracketed')
@@ -107,8 +107,8 @@ brent_root_ci = function(physcon, atmos, leaf, flux, xa, xb, tol) {
         }
       }
       flux_fb = CiFunc(physcon, atmos, leaf, flux, b);
-      flux = flux_fb[1]
-      fb = flux_fb[2]
+      flux = flux_fb[[1]]
+      fb = flux_fb[[2]]
       
       # Check to end iteration
       

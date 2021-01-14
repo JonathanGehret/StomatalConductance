@@ -33,26 +33,13 @@ physcon$Dh0 = 18.9e-06;               # Molecular diffusivity (heat) at 0C and 1
 physcon$Dv0 = 21.8e-06;               # Molecular diffusivity (H2O) at 0C and 1013.25 hPa (m2/s)
 physcon$Dc0 = 13.8e-06;               # Molecular diffusivity (CO2) at 0C and 1013.25 hPa (m2/s)
 
-
-# --- Set leaf physiology variables
-
-# Stomatal conductance: 0 = Medlyn model. 1 = Ball-Berry model. 2 = WUE optimization
-
-leaf$gstyp = 1;
-
-# Photosynthetic pathway: 1 = C3. 0 = C4
-
-leaf$c3psn = 1;
-
-# Photosynthesis co-limitation: 0 = no. 1 = yes
-
-leaf$colim = 1;
-
 # Leaf physiological parameters
 
 leaf = LeafPhysiologyParams(params,physcon,leaf);
 
-# --- Atmospheric forcing
+# --- Atmospheric forcing 
+# for Photosynthesis/Stomatal Conductance atmos$eair and flux$apar are needed 
+# these are calcualet in the lines below
 
 # Process sunlit or shaded leaf
 
@@ -69,7 +56,8 @@ atmos$o2air = 0.209 * 1000;
 atmos$tair = physcon$tfrz + 30;
 atmos$relhum = 60;
 
-# Wind (m/s)
+# Wind (m/s) 
+# needed for leafpboundarylayerconductance
 # u = 0.01_r8  ! Still air
 # u = 0.1_r8   ! Calm - smoke rises vertically
 # u = 1.0_r8   ! Light air - smoke drift indicates wind direction

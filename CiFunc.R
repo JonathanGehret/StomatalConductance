@@ -61,8 +61,14 @@ library("pracma")
 # C3: Rubisco-limited photosynthesis
 flux$ac = flux$vcmax * max(ci_val - flux$cp, 0) / (ci_val + flux$kc * (1 + atmos$o2air / flux$ko));
 
+print("ac:")
+print(flux$ac)
+
 # C3: RuBP regeneration-limited photosynthesis
 flux$aj = flux$je * max(ci_val - flux$cp, 0) / (4 * ci_val + 8 * flux$cp);
+
+print("aj:")
+print(flux$aj)
 
 # --- Net photosynthesis as the minimum or co-limited rate
 
@@ -77,7 +83,16 @@ bquad = -(flux$ac + flux$aj);
 cquad = flux$ac * flux$aj;
 pcoeff = c(aquad,bquad,cquad);
 proots = roots(pcoeff);
+
+
+print("pcoeff:")
+print(pcoeff)
+
 ai = min(proots[1], proots[2]);
+
+print("ai:")
+print(ai)
+
 flux$ag = ai;
 #}
 
@@ -91,6 +106,8 @@ flux$ag = max(flux$ag, 0);
 # Net CO2 uptake
 
 flux$an = flux$ag - flux$rd;
+
+# flux$an = max(flux$an, 0)
 
 # --- CO2 at leaf surface
 

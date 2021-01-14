@@ -97,6 +97,9 @@ t1 = ft(flux$tleaf, leaf$rdha);
 t2 = fth(flux$tleaf, leaf$rdhd, leaf$rdse, leaf$rdc);
 flux$rd = leaf$rd25 * t1 * t2;
 
+print("rd:")
+print(flux$rd)
+
 # --- Electron transport rate for C3 plants
 
 # Solve the polynomial: aquad*Je^2 + bquad*Je + cquad = 0
