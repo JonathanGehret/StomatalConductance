@@ -38,7 +38,6 @@ LeafBoundaryLayer = function(physcon, atmos, leaf, flux) {
   
   Re = atmos$wind * leaf$dleaf / visc; # Reynolds number
   Pr = visc / Dh;                      # Prandtl number
-#  Scv = visc / Dv;                     # Schmidt number for H2O
   Scc = visc / Dc;                     # Schmidt number for CO2
   
   # Grashof number
@@ -53,44 +52,30 @@ LeafBoundaryLayer = function(physcon, atmos, leaf, flux) {
   
   # Forced convection - laminar flow
   
-#  Nu_lam  = b1 * 0.66 *  Pr^0.33 * Re^0.5;     # Nusselt number
-#  Shv_lam = b1 * 0.66 * Scv^0.33 * Re^0.5;     # Sherwood number, H2O
   Shc_lam = b1 * 0.66 * Scc^0.33 * Re^0.5;     # Sherwood number, CO2
   
   # Forced convection - turbulent flow
   
-#  Nu_turb  = b1 * 0.036 *  Pr^0.33 * Re^0.8;   # Nusselt number
-#  Shv_turb = b1 * 0.036 * Scv^0.33 * Re^0.8;   # Sherwood number, H2O
   Shc_turb = b1 * 0.036 * Scc^0.33 * Re^0.8;   # Sherwood number, CO2
   
   # Choose correct flow regime for forced convection
   
-#  Nu_forced = max(Nu_lam, Nu_turb);
-#  Shv_forced = max(Shv_lam, Shv_turb);
   Shc_forced = max(Shc_lam, Shc_turb);
   
   # Free convection
   
-#  Nu_free  = 0.54 *  Pr^0.25 * Gr^0.25;        # Nusselt number
-#  Shv_free = 0.54 * Scv^0.25 * Gr^0.25;        # Sherwood number, H2O
   Shc_free = 0.54 * Scc^0.25 * Gr^0.25;        # Sherwood number, CO2
   
   # Both forced and free convection regimes occur together
   
-#  Nu = Nu_forced + Nu_free;
-#  Shv = Shv_forced + Shv_free;
   Shc = Shc_forced + Shc_free;
   
   # --- Boundary layer conductances (m/s)
   
-#  flux$gbh = Dh *  Nu / leaf$dleaf;
-#  flux$gbv = Dv * Shv / leaf$dleaf;
   flux$gbc = Dc * Shc / leaf$dleaf;
   
   # --- Convert conductance (m/s) to (mol/m2/s)
   
- # flux$gbh = flux$gbh * atmos$rhomol;
-#  flux$gbv = flux$gbv * atmos$rhomol;
   flux$gbc = flux$gbc * atmos$rhomol;
   
   return(flux)
