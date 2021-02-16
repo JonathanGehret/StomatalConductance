@@ -1,7 +1,32 @@
 ---
 title: "Term Paper Photosynthesis Stomatal Conductance"
+author: "Jonathan Gehret, Immo Shan, Lina Wernicke"
 output: html_notebook
 ---
+
+
+Übersicht:
+- Theorie
+ - PS und sc jeweils
+ - welche funktionen?
+ - ziel des models
+- Bericht: Entwicklung vom Code
+  - aufbau des projekts: mehrere gruppen etc
+  - Aufbau (Baumdiagramm?)
+  - Probleme 
+    - Umwandlung matlab -> R
+    - Code
+    - merging mit anderen (LAI,tleaf etc)
+  - wo haben wir die theorie verwendet?
+  - überlegung dateiformat: listen, benennung der listen
+  - plotmaker makeof
+  - statevariables/parameters : benutzung, eintragen in gemeinsame file
+- Ergebnispräsentation mit Graphiken
+  - Kalibrierung
+  - Sensitivity analysis
+  - model an sich (output)
+- Diskussion: was können wir besser machen, was sind limits etc? Was ist realisitsch/unrealistisch?
+
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
